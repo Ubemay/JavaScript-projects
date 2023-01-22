@@ -43,24 +43,30 @@ function copyToClickboard(text) {
     document.body.removeChild(tempTextField);
   }
 
-function setRandomColors() {
-    const colors = [];
+function setRandomColors(isInitial) {
+    const colors = isInitial ? getColorsFromHash() : [];
 
-    cols.forEach(col => {
+    cols.forEach( (col, index) => {
         const isLocked = col.querySelector('i').classList.contains('fa-lock');
         const text = col.querySelector('h2');
         const button = col.querySelector('button');
-        const color = chroma.random();
 
         if(isLocked) {
             colors.push(text.textContent);
-            return
+            return;
         }
 
-        colors.push(color)
+        const color = isInitial 
+        ? colors[index] 
+         ? colors[index] 
+         : chroma.random()
+        : chroma.random();
+
+        if (!isInitial) {
+            colors.push(color);
+        }
 
         text.textContent = color;
-
         col.style.background = color;
 
         setTextColor(text, color);
@@ -87,10 +93,10 @@ function getColorsFromHash() {
         return document.location.hash
         .substring(1)
         .split('-')
-        .map(color => '#' + color) 
+        .map((color) => '#' + color) 
     }
 
     return [];
 }
 
-setRandomColors()
+setRandomColors(true)
