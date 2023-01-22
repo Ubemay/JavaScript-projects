@@ -18,6 +18,8 @@ document.addEventListener('click', event => {
         
         node.classList.toggle('fa-lock-open')
         node.classList.toggle('fa-lock')
+    } else if (type === 'copy') {
+        copyToClickboard(event.target.textContent);
     }
 })
 
@@ -31,6 +33,15 @@ function generateRandomColor() {
 
     return '#' + color;
 }
+
+function copyToClickboard(text) {
+    const tempTextField = document.createElement("textarea");
+    tempTextField.value = text;
+    document.body.appendChild(tempTextField);
+    tempTextField.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempTextField);
+  }
 
 function setRandomColors() {
     cols.forEach(col => {
